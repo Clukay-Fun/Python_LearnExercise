@@ -14,18 +14,35 @@
 使用一个空列表 seen 记录已出现的元素。
 遍历原列表，只添加不在 seen 中的元素，并加入 seen。
 '''
-
 seen = []
+lst = []
 str1 = str(input())
 seen = str1.split(",")
-x = 0
-# 遍历一遍所有字符串
-for i in seen:
-    # 比较一遍剩余字符串，统计重复的字符串位置
-    for y in range(len(seen)):
-        
-        print(i)
-while 1:
-    num = 0
+# apple,banana,apple,cherry
+len1 = len(seen)
+for i in range(len(seen)):
+    for y in seen[i:len1]:
+        print(y)
+print(lst)
     
-    break
+# 答案
+
+# 获取用户输入
+raw = input("请输入单词（用逗号分隔）：")
+
+# 用逗号分割成列表
+words = raw.split(",")
+
+# 去重并保持首次出现顺序
+seen = []          # 用来记录已经出现过的元素
+unique = []        # 去重后的结果列表
+
+for w in words:
+    # 去掉首尾空格（防止 "apple " 与 "apple" 被视为不同）
+    w = w.strip() # 去除每个单词前后可能的多余空格
+    if w not in seen:          # 只在第一次出现时加入
+        seen.append(w)
+        unique.append(w)
+
+# 输出
+print(f"去重后的列表：{unique}")

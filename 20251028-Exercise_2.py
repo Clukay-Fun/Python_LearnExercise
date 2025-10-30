@@ -12,3 +12,19 @@
 奇数：num % 2 == 1
 偶数：num % 2 == 0
 '''
+num1,num2 = 0,0
+for i in range(1,21):
+    if i % 2 == 1:
+        num1 += 1
+    elif i % 2 == 0: # 改进建议 else
+        num2 += 1
+        
+print("奇数个数：",num1)
+print("偶数个数：",num2)
+
+# 优化建议
+numbers = list(range(1, 21))
+odd_count = sum(1 for x in numbers if x % 2 == 1)
+even_count = len(numbers) - odd_count
+print("奇数个数：", odd_count)
+print("偶数个数：", even_count)
