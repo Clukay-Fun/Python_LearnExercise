@@ -34,3 +34,27 @@ def count_words(filename):
     return dict(sorted(word_dict.items(),key=lambda x:x[1], reverse=True))
 result = count_words("G:/.Program/Python/Python_LearnExercise-1/2025-11/input.txt")        
 print(result)
+
+'''改进点
+将 word_dict 移到函数内，避免全局变量问题。
+在 FileNotFoundError 时返回空字典，增加健壮性。
+移除排序，简化代码（但如果你想保留排序，可以用 sorted()）。
+使用相对路径 "input.txt"，更通用。。
+'''
+
+#改进后的代码
+def count_words(filename):
+    word_dict = {}  # 定义在函数内
+    try:
+        with open(filename, 'r', encoding='utf-8') as file:
+            for line in file:
+                words = line.strip().lower().split()
+                for word in words:
+                    word_dict[word] = word_dict.get(word, 0) + 1
+    except FileNotFoundError:
+        print("文件不存在")
+        return {}  # 返回空字典
+    return word_dict  # 按题目要求直接返回字典
+
+result = count_words("input.txt")
+print(result)

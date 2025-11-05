@@ -43,3 +43,40 @@ def load_scores(filename):
 
 save_scores(scores, "G:/.Program/Python/Python_LearnExercise-1/2025-11/scores.txt")
 load_scores("G:/.Program/Python/Python_LearnExercise-1/2025-11/scores.txt")
+
+'''改进点
+修复 load_scores 返回值：return score_dict。
+添加 ValueError 处理，忽略无效格式行。
+使用 split(":", 1) 防止姓名中包含 : 导致错误。
+返回空字典在异常情况下。
+使用相对路径 "scores.txt"。
+'''
+
+#改进后的代码
+def save_scores(scores, filename):
+    try:
+        with open(filename, 'w', encoding='utf-8') as file:
+            for name, score in scores.items():
+                file.write(f"{name}:{score}\n")
+    except FileNotFoundError:
+        print("文件不存在")
+
+def load_scores(filename):
+    score_dict = {}
+    try:
+        with open(filename, 'r', encoding='utf-8') as file:
+            for line in file:
+                try:
+                    name, score = line.strip().split(":", 1)
+                    score_dict[name] = int(score)
+                except ValueError:
+                    print(f"无效格式行：{line.strip()}")
+    except FileNotFoundError:
+        print("文件不存在")
+    return score_dict  # 直接返回字典
+
+# 测试
+scores = {"Alice": 85, "Bob": 92, "Charlie": 78}
+save_scores(scores, "scores.txt")
+loaded = load_scores("scores.txt")
+print(loaded)
