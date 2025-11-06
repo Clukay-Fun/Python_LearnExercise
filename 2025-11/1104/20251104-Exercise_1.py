@@ -48,3 +48,38 @@ class Student:
 student = Student("Alice", 85)
 print(student.get_grade())  # B
 student.display()  # Alice: 85 (B)
+
+
+'''改进点
+简化 __init__：合并成绩验证和赋值。
+修改 get_grade：返回字符串，而不是打印。
+修正 display：输出正确格式，调用 get_grade() 获取等级。
+改进错误信息：更具体。
+'''
+
+class Student:
+    def __init__(self, name, score):
+        if not (0 <= score <= 100):
+            raise ValueError("分数必须在 0-100 之间")
+        self.name = name
+        self.score = score
+    
+    def get_grade(self):
+        if self.score >= 90:
+            return "A"
+        elif self.score >= 80:
+            return "B"
+        elif self.score >= 70:
+            return "C"
+        elif self.score >= 60:
+            return "D"
+        else:
+            return "F"
+    
+    def display(self):
+        print(f"{self.name}: {self.score} ({self.get_grade()})")
+
+# 测试
+student = Student("Alice", 85)
+print(student.get_grade())  # B
+student.display()           # Alice: 85 (B)

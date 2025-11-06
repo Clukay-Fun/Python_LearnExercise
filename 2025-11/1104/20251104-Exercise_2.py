@@ -45,3 +45,21 @@ todoList.append(todoItem("Exercise",2))
 new_lst = sorted(todoList, key=lambda x: x.priority)
 for task in new_lst:
     task.__str__()
+    
+'''改进点
+修正 __str__：返回字符串，而不是 print。
+添加优先级验证：确保是正整数。
+使用 print(task) 替代 task.__str__()。
+变量名更简洁：todos 更符合 Python 命名习惯。
+'''
+
+from todo import TodoItem
+
+todos = []
+todos.append(TodoItem("Write code", 1))
+todos.append(TodoItem("Read book", 3))
+todos.append(TodoItem("Exercise", 2))
+
+sorted_todos = sorted(todos, key=lambda x: x.priority)
+for task in sorted_todos:
+    print(task)  # 自动调用 __str__
