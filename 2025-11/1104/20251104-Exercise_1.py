@@ -18,3 +18,33 @@ student.display()  # Alice: 85 (B)
 在 __init__ 中验证成绩范围。
 get_grade() 使用 if-elif-else 判断等级。
 '''
+class Student:
+    def __init__(self,name,score):
+        self.name = name
+        self.score = score
+        
+        if 0 <= self.score <= 100:
+            self.score = score
+        else:
+            raise ValueError("分数超过范围了")
+            
+    
+    def get_grade(self):
+        if self.score >= 90:
+            level = "A"
+        elif self.score >= 80:
+            level = "B"
+        elif self.score >= 70:
+            level = "C"
+        elif self.score >= 60:
+            level = "D"
+        else:
+            level = "F"
+        print(level)
+        
+    def display(self):
+        print(f"{self.name},{self.score}")
+        
+student = Student("Alice", 85)
+print(student.get_grade())  # B
+student.display()  # Alice: 85 (B)

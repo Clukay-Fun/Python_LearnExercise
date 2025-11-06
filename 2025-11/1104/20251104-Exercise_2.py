@@ -25,8 +25,8 @@
 1: Write code
 2: Exercise
 3: Read book
-提示：
 
+提示：
 todo.py：
 pythonclass TodoItem:
     def __init__(self, task, priority):
@@ -35,3 +35,13 @@ pythonclass TodoItem:
 
 main.py：使用 sorted(todos, key=lambda x: x.priority)。
 '''
+
+import todo
+todoList = []
+todoItem = todo.TodoItem
+todoList.append(todoItem("Write code",1))
+todoList.append(todoItem("Read book",3))
+todoList.append(todoItem("Exercise",2))
+new_lst = sorted(todoList, key=lambda x: x.priority)
+for task in new_lst:
+    task.__str__()
