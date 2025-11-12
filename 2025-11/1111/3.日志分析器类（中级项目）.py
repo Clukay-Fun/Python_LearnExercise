@@ -2,30 +2,75 @@
 练习 3：日志分析器类（中级项目）
 题目描述：
 创建一个 LogAnalyzer 类，分析日志文件（每行格式：[YYYY-MM-DD HH:MM:SS] LEVEL message），统计每个级别（INFO, WARNING, ERROR）的出现次数，并提取所有 ERROR 消息。
+'''
+import re
+class LogAnalyzer:
+    line_lst = list()
+    line_dict = dict()
+    error_lst = list()
+    def load_log(self,filename):
+        with open(filename,'r',encoding='utf-8') as file:
+            for line in file:
+                self.line_lst.append(line.strip())
+        return self.line_lst
+    
+    def get_stats(self):
+        pattern = re.compile(r'^\[\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\] (INFO|WARNING|ERROR) (.+)$')
+        for line in self.line_lst:
+            info = re.match(pattern,line)
+            level = info.group(1)
+            if level == 'ERROR':
+                self.error_lst.append(info.group(2))
+                
+            self.line_dict[level] = self.line_dict.get(level,0)+1
+        return dict(sorted(self.line_dict.items(),key=lambda x:x[1], reverse=True))
+    
+    def get_errors(self):
+        return self.error_lst
+    
+analyzer = LogAnalyzer()
+analyzer.load_log("2025-11/1111/log.txt")
+print(analyzer.get_stats())
+print(analyzer.get_errors())
 
-要求：
-1.定义 LogAnalyzer 类：
-    方法 load_log(filename)：读取日志文件。
-    方法 get_stats()：返回 {level: count} 字典。
-    方法 get_errors()：返回 ERROR 消息列表。
+'''改进点
+1.将 line_lst, line_dict, error_lst 改为实例属性，在 __init__ 初始化。
+2.添加 FileNotFoundError 处理。
+3.检查 re.match 结果，跳过无效行。
+4.初始化 stats 字典，确保所有级别都有默认值。
+5.移除 load_log 的返回值。
+'''
+#改进后代码
+import re
+class LogAnalyzer:
+    def __init__(self):
+        self.lines = []
+        self.stats = {'INFO': 0, 'WARNING': 0, 'ERROR': 0}
+        self.errors = []
+    
+    def load_log(self, filename):
+        try:
+            with open(filename, 'r', encoding='utf-8') as file:
+                self.lines = [line.strip() for line in file]
+        except FileNotFoundError:
+            print("文件不存在")
+    
+    def get_stats(self):
+        pattern = re.compile(r'^\[\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\] (INFO|WARNING|ERROR) (.+)$')
+        for line in self.lines:
+            match = re.match(pattern, line)
+            if match:
+                level = match.group(1)
+                self.stats[level] += 1
+                if level == 'ERROR':
+                    self.errors.append(match.group(2))
+        return self.stats
+    
+    def get_errors(self):
+        return self.errors
 
-2.使用正则表达式解析日志行（r'^\[\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\] (INFO|WARNING|ERROR) (.+)$'）。
-
-3.使用 try-except 处理文件和格式错误。
-
-4.测试文件 log.txt：
-[2023-10-01 12:00:00] INFO System started
-[2023-10-01 12:01:00] ERROR Failed to connect
-[2023-10-01 12:02:00] WARNING Low memory
-[2023-10-01 12:03:00] ERROR Invalid input
-
-示例：
+# 测试
 analyzer = LogAnalyzer()
 analyzer.load_log("log.txt")
 print(analyzer.get_stats())  # {'INFO': 1, 'WARNING': 1, 'ERROR': 2}
 print(analyzer.get_errors())  # ['Failed to connect', 'Invalid input']
-
-提示：
-- 使用 re.match(pattern, line) 解析每行。
-- 存储结果：self.stats = {'INFO': 0, 'WARNING': 0, 'ERROR': 0}。
-'''
